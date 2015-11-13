@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>Project 2</title>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" type="text/css" href="http://www.sci.brooklyn.cuny.edu/~sdexter/style.css" />
+</head>
+
+<body>
+    <div id="container">
+        <h1>Project 2</h1>
+
+        <h2>Objectives</h2>Through your work on this project, you will advance your ability to:
+
+        <ul>
+            <li>Work with code provided by others.</li>
+
+            <li>Develop a simple WebSockets application in Java.</li>
+
+            <li>Develop robust object-oriented designs.</li>
+
+            <li>Combine different domains of programming technique (graphics, networking) in one application.</li>
+        </ul>
+
+        <h2>Overview</h2>
+
+        <p>In project 1, you implemented a simple graphical game
+        controlled from the keyboard and/or mouse.</p>
+
+        <p>In project 2, you'll extend that game to allow for simple
+        network play. You'll need to adapt the game logic a bit to accommodate multiple players. Don't make this more complicated than it needs to be; <i>probably</i> the easiest thing to do is to have the players collaborate toward the same goal as in the single-player version of the game. You can even keep score (if you like) for the team rather than for individuals.  I <em>strongly</em> recommend that you focus on getting a two-player version of your game working; don't worry about multiple players unless you get the two-player version working smoothly.</p>
+
+        <p>You won't need to alter the essentials of the game logic (what kinds of objects are there? what do they do?) but you will need to "embed" the game in a networked application.</p>
+
+        <h2>The Skeleton</h2>
+
+        <p>Mostly, the skeleton for project 2 is your code from
+        project 1. There are some important changes, though, and the
+        code into the project 2 repo points you in the right
+        direction. First, the repo contains all the WebSockets
+        libraries you'll need. Second, it contains some <em>very</em>
+        skeletal code--you may not want to use this directly, but use
+          it as a template to modify your existing code.</p>
+          
+        <p>Conceptually, the skeleton of project 2 is this:</p>
+
+        <ul>
+            <li>You'll "split" your game into client and server logic,
+            as follows:</li>
+
+            <li>The client will display one player's view of the game,
+              drawing all the objects on the screen.</li>
+
+            <li>The client will also respond to controls. Of course
+            it will respond to the <em>local</em> player's controls,
+            but it will also need to send and receive information
+            from the server: it will send the local player's control
+            information <em>to</em> the server, and it will receive the remote
+            player's control information <em>from</em> the
+              server.</li>
+
+            <li>The client should also get information from the server
+            about other game "events"--the creation of new objects, or
+            destruction of objects, collisions, etc. Note that this
+            means the client can be fairly "dumb"--it just draws stuff
+            and deals with controls, but has almost no "game logic."</li>
+
+            <li>The server will keep track of the state of the game,
+            checking for collisions, etc. (So note that the server
+            doesn't need any Swing components--the server does no
+            display). But it <i>does</i> need to keep track of game time ('ticks') so that, for example, it can detect collisions at the right time. The server should send messages to the players whenever "noteworthy events" occur--a control signal is received, or an object is created or destroyed.<</li>
+
+            <li>Also, you'll need to create websocket client and server endpoints. Mainly, the clients will send messages to the server about how the local player's controlled object is moving; the server will broadcast that information to the other players. The server may also have to broadcast messages about the creation or destruction of new objects, or other game elements you need.</li>
+        </ul>
+        
+
+     
+       
+        <h2>WebSocket Communications</h2>
+
+ <p>Here are some things to think about:
+   <ul>
+       <li>How will you make sure all the players start with the same game configuration?</li>
+
+  <li>When can a game actually start? How can you make sure that everyone's "clock" starts at nearly the same time?</li>
+  <li>You might want to make the two players' controls different, so that you can test the game on one computer.</li>
+  <li>WebSockets may not be the fastest networking technology, so there may be problems with lag when you play on multiple machines. That's OK.</li>
+  
+</ul></p>
+
+<p>I strongly recommend you adapt code from the <code>pokeServer/pokeClient</code> application in lab 4, especially related to sending websocket messages.</p>
+
+<h2>Hints</h2>
+
+<p>It might be a good idea to "re-factor" your game <i>first</i>,
+  before you think about the client-server/websockets logic. Depending
+  on your approach to project 1, this may not be too complicated. That
+  is, give the <code>GamePanel</code> object
+  responsibility <em>only</em> for drawing; give another object
+  responsibility for dealing with controls, and another object
+  responsibility for the game logic.  You might even add multi-player
+  (or two-player) logic to your game at this point.  Once you have the game working well using the new design, then the rest of the project is just about adding websocket endpoints "in between." </p>
+
+<h2>Doing More</h2>
+
+<p>If you get a two-player version of your game running fairly smoothly, and you want to do more, here are some ideas:
+  
+  <ul>
+    <li>Add more players. You may have to do some work to figure out the right way to assign keyboard-controls to the new players.</li>
+    <li>Adjust the views so that the local player's controlled-object is visually distinct (maybe it's red and the other controlled objects are blue)</li>
+    <li>Add the ability for the players to broadcast chat-style messages to the other players. (One possibility would be to add a few buttons to the player's views to send some pre-set messages; this way you could use the keyboard for control and the mouse to send those messages.)</li>
+    <li>Experiment with keeping score for the players separately.</li>
+    <li>Other bells 'n' whistles?</li>
+  </ul>
+
+      
+        <h2>Submission and Grading</h2>
+
+        <p>This project is due by midnight on Class 28. After that time, I will clone your GitHub repository. No subsequent changes to your repository will be graded.</p>
+
+        <p></p>
+
+        <p>I will communicate with you about your project through GitHub&mdash;at minimum, I will add comments to your code and push the results back to you.</p>
+
+        <p>As before, I will grade out of 100 points, allocated among the following categories:</p>
+
+        <ol>
+            <li>
+                <p><b>Documentation</b>. Your project should include updated documentation in the doc folder. Use Eclipse's "Generate Javadocs..." function to generate the new documentation.</p>
+
+                <p></p>
+
+                <p>Also, revise the README.md file. It should have three main sections. First, "Description and Instructions." Briefly describe the game and its objective(s), and tell me how to play it. Next, "Works Cited." I expect you will need to consult a variety of resources to complete this project. Any website, book, or similar resource from which you get useful guidance must be listed here, along with a brief description of what you got from it (a bit of code? an explanation? an answer to a question?). You do not need to list the Java API or either of the two books required/recommended for class. If you use no other resources, then your "Works Cited" section must simply contain the word <em>None</em>. Finally, "Code Summary." In this section, list changes from project 1 code:  <em>new</em> classes and methods and <em>changed</em> classes and methods. to include a brief summary of the methods and classes you changed. If you do any work for extra credit, then add a section on "Extra Credit" that briefly lists the extra credit features you successfully implemented.</p>
+            </li>
+
+            <li>
+                <p><b>Design</b>. Are the relationships among your
+                classes (and the way they interact with the Java
+                library classes) logical, clear, and robust? Do they
+                (for example) adhere to the IS-A and HAS-A rules? Is your code otherwise well-designed, e.g. avoiding duplicate code?</p>
+            </li>
+
+            <li>
+                <p><b>Style</b>. Your code should be properly formatted, with enough (but not too much) whitespace. Eclipse will do most of this for you; make sure you let it help you. Variable names, method names, etc, should all be "self-documenting" but not excessively long. <em>Generally</em>, you can use any style you like, as long as you're consistent. If you're not sure what style to use, follow the <a href="https://google-styleguide.googlecode.com/svn/trunk/javaguide.html">Google Style Guide</a>, except where Eclipse's automatic formatting contradicts these guidelines.</p>
+            </li>
+
+            <li>
+                <p><b>Correctness and Efficiency</b> . Does your game "play properly?" Does it offer at least the minimum set of behaviors described above? Does it do so efficiently, without wasting computation?</p>
+            </li>
+        </ol>
+
+       
+        <p>It's probably clear, but just to be explicit: on this project, you are to work strictly <em>on your own</em>. Specifically, you may neither show your code to, nor look at the code of, anyone else taking 3120 this semester. You may consult online/textbook resources (subject to the "Documentation" requirements above). You may certainly consult with me. You may, if you like, discuss your design at a high level with other students ("Oh, I found the <code>java.foo.bar</code> package to be really helpful," or, "Sure, I can explain the geometry of a paint window to you.").</p>
+    </div>
+</body>
+</html>
