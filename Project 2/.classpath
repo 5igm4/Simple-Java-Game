@@ -25,5 +25,6 @@
 	<classpathentry kind="lib" path="lib/tyrus-server-1.8.3-javadoc.jar"/>
 	<classpathentry kind="lib" path="lib/tyrus-server-1.8.3.jar"/>
 	<classpathentry kind="lib" path="lib/tyrus-spi-1.8.3.jar"/>
+	<classpathentry kind="src" path="/Project2-Torgov"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
