@@ -8,7 +8,10 @@ import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
 public class MessageDecoder implements Decoder.Text<Message> {
-
+	/**
+	 * Standard message decoder used to determine
+	 * what values to set to the message object
+	 */
 	@Override
 	public Message decode(String msg) throws DecodeException {
 		JsonObject jsonObject = Json.createReader(new StringReader(msg))
@@ -32,6 +35,11 @@ public class MessageDecoder implements Decoder.Text<Message> {
 		else if(jsonObject.getString("type").equals("setPlayer")) {
 			SetPlayerControllerMessage message = 
 					new SetPlayerControllerMessage(jsonObject.getBoolean("bool"));
+			return message;
+		}
+		else if(jsonObject.getString("type").equals("gameEnd")) {
+			EndGameMessage message =
+					new EndGameMessage(jsonObject.getBoolean("end"));
 			return message;
 		}
 		else throw new DecodeException(msg,"Neither poke nor prod.");

@@ -6,7 +6,7 @@ import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
-public class StartGameEncoder implements Encoder.Text<StartGameMessage> {
+public class EndGameEncoder implements Encoder.Text<EndGameMessage> {
 
 	@Override
 	public void destroy() {
@@ -23,10 +23,10 @@ public class StartGameEncoder implements Encoder.Text<StartGameMessage> {
 	 * This function builds the object
 	 */
 	@Override
-	public String encode(StartGameMessage msg) throws EncodeException {
+	public String encode(EndGameMessage msg) throws EncodeException {
 		JsonObject gameStart = Json.createObjectBuilder()
-				.add("type","gameStart")
-                	.add("start", true)
+				.add("type","gameEnd")
+                	.add("end", true)
                 .build();
         return gameStart.toString();
 	}

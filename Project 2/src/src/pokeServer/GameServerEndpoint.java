@@ -16,12 +16,18 @@ import javax.websocket.server.ServerEndpoint;
  */
  
 @ServerEndpoint(value = "/game",decoders = { MessageDecoder.class }, encoders = { 
-		GameControllerEncoder.class, StartGameEncoder.class, SetPlayerControllerEncoder.class })
+		GameControllerEncoder.class, StartGameEncoder.class, SetPlayerControllerEncoder.class
+		, EndGameEncoder.class })
 public class GameServerEndpoint {
 	public static Session current;
  
     private Logger logger = Logger.getLogger(this.getClass().getName());
- 
+    
+    /**
+     * 
+     * On connection this sends a set player controller message to 
+     * tell the game to set the client as player one
+     */
     @OnOpen
     public void onOpen(Session peer) {
     	int size = peer.getOpenSessions().size();
@@ -37,7 +43,7 @@ public class GameServerEndpoint {
 		            }
 		        }
 			}
-			if(size == 2){
+			if(size == 2){ //when we reach two players, send a StartGameMessage
 		        for (Session other : peer.getOpenSessions()) {
 		            try {
 		                other.getBasicRemote().sendObject(new StartGameMessage(true));
@@ -50,7 +56,13 @@ public class GameServerEndpoint {
 //    			peer.close();
 		}
     }
- 
+    /**
+     * This function is what notifies the other other player 
+     * of the current direction of the ball
+     * @param peer session
+     * @param msg message
+     * @throws EncodeException if something goes wrong with encoding
+     */
     @OnMessage
     public void onMessage(Session peer, Message msg) throws EncodeException {
         logger.log(Level.FINE, "Message {0} from {1}", new Object[]{msg, peer.getId()});

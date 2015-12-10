@@ -26,7 +26,8 @@ import src.wsMessages.*;
  *
  */
 @ClientEndpoint(decoders = { MessageDecoder.class }, encoders = {
-		GameControllerEncoder.class, StartGameEncoder.class, SetPlayerControllerEncoder.class })
+		GameControllerEncoder.class, StartGameEncoder.class, SetPlayerControllerEncoder.class
+		, EndGameEncoder.class })
 public class Main{
 	private Logger logger = Logger.getLogger(this.getClass().getName());
 	private static CountDownLatch latch;
@@ -55,6 +56,10 @@ public class Main{
 		else if (message instanceof SetPlayerControllerMessage) {
 			System.out.println("GOT PLAYER 1");
 			GamePanel.setPlayer1(true);
+		}
+		else if(message instanceof EndGameMessage) {
+			System.out.println("ENDING GAME");
+			GamePanel.setGameOver(true);
 		}
 		else {
 			logger.info("Message not instance of GameControllerMessage...");

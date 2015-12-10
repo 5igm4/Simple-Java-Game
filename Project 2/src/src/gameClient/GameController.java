@@ -21,6 +21,10 @@ public class GameController extends KeyAdapter {
 		 * Listener for keyboard input: affects the ball position
 		 * forcing the ball to move on either a horizontal or
 		 * vertical slope 
+		 * 
+		 * This function also looks at the isPlayer
+		 * to determine whether it should move on either the
+		 * y plane as Player 1 can only move up and down.
 		 */
         @Override
         public void keyPressed(KeyEvent e) {

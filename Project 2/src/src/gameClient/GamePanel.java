@@ -4,12 +4,16 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import javax.websocket.EncodeException;
 import javax.websocket.Session;
+
+import src.wsMessages.EndGameMessage;
 
 
 /**
@@ -27,7 +31,7 @@ public class GamePanel extends JPanel implements ActionListener {
    	static final int FRAME_RATE = 30; // animation proceeds at 30 frames per second
    	private int speedCounter = 0;
     private int SCORE = 0;
-	private boolean isGameOver = false;
+	private static boolean isGameOver = false;
 	private static boolean didStart = false;
 	private static boolean isPlayer1 = false;
     Random random = new Random();
@@ -66,7 +70,7 @@ public class GamePanel extends JPanel implements ActionListener {
         drawPlayer(g, player);
         drawObstacles(g);
 		drawString(g,362,466,14,("Score: " + SCORE), Color.BLACK);
-		if(isGameOver == true){
+		if(isGameOver() == true){
 			drawString(g,100,250,50,"GAME OVER", Color.WHITE);
 			drawString(g,100,300,20,("Final Score: " + SCORE), Color.WHITE);
 		}
@@ -126,10 +130,13 @@ public class GamePanel extends JPanel implements ActionListener {
 	 */
 	
 	private void tick() {
-		speedUp(player);
-		if(player.move()) //move checks if the player bounces, which causes the game to end
+		if(isGameOver())
 			doGameOver();
-		
+		speedUp(player);
+		if(player.move()) { //move checks if the player bounces, which causes the game to end
+			weLost();
+			doGameOver();
+		}
 		isGameOver(obstacleArr,player);
 
 		repaint();		// ask to have the game redrawn (this will invoke paintComponent() when the system says the time is right)
@@ -148,7 +155,18 @@ public class GamePanel extends JPanel implements ActionListener {
 			speedCounter = 0;
 		}
 	}
-
+	/**
+	 * Called when we have to let the other
+	 * player know we lost
+	 */
+	private void weLost() {
+		try {
+			GameController.getSession().getBasicRemote().sendObject(new EndGameMessage(true));
+		} catch (IOException | EncodeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * Start the Timer: this will cause events to be fired, and thus the animation to begin
 	 * @param peer 
@@ -185,13 +203,15 @@ public class GamePanel extends JPanel implements ActionListener {
 	public void isGameOver(GameObject [] obstacleArr, GameObject player){
 		for(GameObject obj : obstacleArr){
 			obj.step();
-			if(GameObject.didCollide(player,obj))
+			if(GameObject.didCollide(player,obj)) {
+				weLost();
 				doGameOver();
+			}
 		}
 	}
 	
 	public void doGameOver(){
-		isGameOver = true;
+		setGameOver(true);
 		setFocusable(false);
 		t.stop();
 		setBackground(Color.BLACK);
@@ -218,4 +238,19 @@ public class GamePanel extends JPanel implements ActionListener {
 	public static void setPlayer1(boolean isPlayer1) {
 		GamePanel.isPlayer1 = isPlayer1;
 	}
+
+	/**
+	 * @return the isGameOver
+	 */
+	public static boolean isGameOver() {
+		return isGameOver;
+	}
+
+	/**
+	 * @param isGameOver the isGameOver to set
+	 */
+	public static void setGameOver(boolean isGameOver) {
+		GamePanel.isGameOver = isGameOver;
+	}
+
 }
