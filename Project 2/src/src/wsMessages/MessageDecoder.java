@@ -14,16 +14,27 @@ public class MessageDecoder implements Decoder.Text<Message> {
 		JsonObject jsonObject = Json.createReader(new StringReader(msg))
 				.readObject();
 
-		if (jsonObject.getString("type").equals("poke")) {
-			PokeMessage message = new PokeMessage(jsonObject.getString("ID"));
+		if (jsonObject.getString("type").equals("gameController")) {
+			GameControllerMessage message = 
+					new GameControllerMessage(
+							jsonObject.getString("ID"),
+							jsonObject.getBoolean("left"),
+							jsonObject.getBoolean("right"),
+							jsonObject.getBoolean("up"),
+							jsonObject.getBoolean("down"));
 			return message;
-		} else if (jsonObject.getString("type").equals("prod")) {
-			ProdMessage message = new ProdMessage(jsonObject.getString("ID"));
+		
+		} else if(jsonObject.getString("type").equals("gameStart")) {
+			StartGameMessage message = 
+					new StartGameMessage(jsonObject.getBoolean("start"));
 			return message;
-		} else if (jsonObject.getString("type").equals("pickle")) {
-			GameControllerMessage message = new GameControllerMessage(jsonObject.getString("ID"));
+		}
+		else if(jsonObject.getString("type").equals("setPlayer")) {
+			SetPlayerControllerMessage message = 
+					new SetPlayerControllerMessage(jsonObject.getBoolean("bool"));
 			return message;
-		} else throw new DecodeException(msg,"Neither poke nor prod.");
+		}
+		else throw new DecodeException(msg,"Neither poke nor prod.");
 
 	}
 

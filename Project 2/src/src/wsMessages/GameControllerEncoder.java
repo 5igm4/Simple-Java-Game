@@ -22,12 +22,16 @@ public class GameControllerEncoder  implements Encoder.Text<GameControllerMessag
 
 	@Override
 	public String encode(GameControllerMessage msg) throws EncodeException {
-		JsonObject jsonProdMessage = Json.createObjectBuilder()
-				.add("type","pickle")
+		JsonObject gameController = Json.createObjectBuilder()
+				.add("type","gameController")
                 .add("ID", msg.getID())
+                	.add("left", msg.isLeft())
+                	.add("right", msg.isRight())
+                	.add("up", msg.isUp())
+                	.add("down", msg.isDown())
                 .build();
-
-        return jsonProdMessage.toString();
+		System.out.println(gameController.toString());
+        return gameController.toString();
 	}
 
 }

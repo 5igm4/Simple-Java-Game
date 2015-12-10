@@ -9,6 +9,7 @@ import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import javax.websocket.Session;
 
 
 /**
@@ -20,20 +21,27 @@ import javax.swing.Timer;
  *
  */
 
+@SuppressWarnings("serial")
 public class GamePanel extends JPanel implements ActionListener {
 	
    	static final int FRAME_RATE = 30; // animation proceeds at 30 frames per second
    	private int speedCounter = 0;
     private int SCORE = 0;
 	private boolean isGameOver = false;
+	private static boolean didStart = false;
+	private static boolean isPlayer1 = false;
     Random random = new Random();
    	Timer t;	// animation timer
    	JButton b3;
    	int randomInt = random.nextInt(7) + 1;
 	PlayerGameObject player; // bare-bones animation: just a simple object that slides across the panel
-	GameObject[] obstacleArr = {(new GameObject(0,250,35,35,random.nextInt(7) + 1,random.nextInt(7) + 1)),
-			   					(new GameObject(239,300,35,35,random.nextInt(7) + 1,random.nextInt(7) + 1)),
-			   					(new GameObject(260,20,35,35,random.nextInt(7) + 1,random.nextInt(7) + 1))};
+	GameObject[] obstacleArr = {(new GameObject(0,250,35,35,2 + 1,3 + 1)),
+								(new GameObject(239,300,35,35,3 + 1,2 + 1)),
+								(new GameObject(260,20,35,35,2 + 1,3 + 1))};
+	
+//	GameObject[] obstacleArr = {(new GameObject(0,250,35,35,random.nextInt(7) + 1,random.nextInt(7) + 1)),
+//			   					(new GameObject(239,300,35,35,random.nextInt(7) + 1,random.nextInt(7) + 1)),
+//			   					(new GameObject(260,20,35,35,random.nextInt(7) + 1,random.nextInt(7) + 1))};
 	/**
 	 * Sets up panel background, creates game Timer, creates initial GameObjects
 	 * 
@@ -143,9 +151,29 @@ public class GamePanel extends JPanel implements ActionListener {
 
 	/**
 	 * Start the Timer: this will cause events to be fired, and thus the animation to begin
+	 * @param peer 
 	 */
 	
-	void go() {
+	void go(Session peer) {
+		GameController.setSession(peer);
+		if(isPlayer1()) {
+			System.out.println("Player 1 is set");
+			GameController.setPlayer1(true);
+		}
+		else
+		{
+			System.out.println("Player 2 is set");
+			GameController.setPlayer1(false);
+		}
+		//wait for message
+		while(!didStart()){
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		t.start();
 	}
 	/**
@@ -167,5 +195,27 @@ public class GamePanel extends JPanel implements ActionListener {
 		setFocusable(false);
 		t.stop();
 		setBackground(Color.BLACK);
+	}
+
+	/**
+	 * @return the didStart
+	 */
+	public boolean didStart() {
+		return didStart;
+	}
+
+	/**
+	 * @param didStart the didStart to set
+	 */
+	public static void setStart(boolean didStart) {
+		GamePanel.didStart = didStart;
+	}
+
+	public static boolean isPlayer1() {
+		return isPlayer1;
+	}
+
+	public static void setPlayer1(boolean isPlayer1) {
+		GamePanel.isPlayer1 = isPlayer1;
 	}
 }

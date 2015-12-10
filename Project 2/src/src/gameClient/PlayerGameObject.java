@@ -28,19 +28,19 @@ public class PlayerGameObject extends GameObject{
 	}
 	
 	public boolean move() {
-		if(GameController.upDirection == true){
+		if(GameController.isUpDirection() == true){
 			topLeft.y -= ySpeed;
 			bottomRight.y -= ySpeed;
 		}
-		if(GameController.downDirection == true){
+		if(GameController.isDownDirection() == true){
 			topLeft.y += ySpeed;
 			bottomRight.y += ySpeed;
 		}
-		if(GameController.rightDirection == true){
+		if(GameController.isRightDirection() == true){
 			topLeft.x += xSpeed;
 			bottomRight.x += xSpeed;
 		}
-		if(GameController.leftDirection == true){
+		if(GameController.isLeftDirection() == true){
 			topLeft.x -= xSpeed;
 			bottomRight.x -= xSpeed;
 		}

@@ -4,7 +4,7 @@ import java.util.logging.*;
 
 import javax.websocket.*;
 
-import wsMessages.*;
+import src.wsMessages.*;
 
 import javax.websocket.server.ServerEndpoint;
 
@@ -15,21 +15,45 @@ import javax.websocket.server.ServerEndpoint;
  *
  */
  
-@ServerEndpoint(value = "/game",decoders = { MessageDecoder.class }, encoders = {
-		GameControllerEncoder.class })
+@ServerEndpoint(value = "/game",decoders = { MessageDecoder.class }, encoders = { 
+		GameControllerEncoder.class, StartGameEncoder.class, SetPlayerControllerEncoder.class })
 public class GameServerEndpoint {
+	public static Session current;
  
     private Logger logger = Logger.getLogger(this.getClass().getName());
  
     @OnOpen
     public void onOpen(Session peer) {
-        logger.info("Connected ... " + peer.getId());
+    	int size = peer.getOpenSessions().size();
+		System.out.println("SESSION SIZE: " + size );
+		if(size <= 2) {
+			logger.info("Connected ... " + peer.getId());
+			if(size == 1){
+		        for (Session other : peer.getOpenSessions()) {
+		            try {
+		                other.getBasicRemote().sendObject(new SetPlayerControllerMessage(true));
+		            } catch (IOException | EncodeException ex) {
+		                Logger.getLogger(GameServerEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+		            }
+		        }
+			}
+			if(size == 2){
+		        for (Session other : peer.getOpenSessions()) {
+		            try {
+		                other.getBasicRemote().sendObject(new StartGameMessage(true));
+		            } catch (IOException | EncodeException ex) {
+		                Logger.getLogger(GameServerEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+		            }
+		        }
+			}
+//    		else  
+//    			peer.close();
+		}
     }
  
     @OnMessage
     public void onMessage(Session peer, Message msg) throws EncodeException {
         logger.log(Level.FINE, "Message {0} from {1}", new Object[]{msg, peer.getId()});
-
         for (Session other : peer.getOpenSessions()) {
             try {
                 other.getBasicRemote().sendObject(msg);
