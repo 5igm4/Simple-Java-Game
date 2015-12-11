@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="lib" path="lib/cdi-api-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/el-api-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/grizzly-framework-2.3.15-gfa.jar"/>
@@ -25,6 +25,5 @@
 	<classpathentry kind="lib" path="lib/tyrus-server-1.8.3-javadoc.jar"/>
 	<classpathentry kind="lib" path="lib/tyrus-server-1.8.3.jar"/>
 	<classpathentry kind="lib" path="lib/tyrus-spi-1.8.3.jar"/>
-	<classpathentry kind="src" path="/Project2-Torgov"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
