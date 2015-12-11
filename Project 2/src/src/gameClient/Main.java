@@ -41,12 +41,20 @@ public class Main{
 			throw new RuntimeException(e);
 		}
 	}
-
+	
+	/**
+	 * This function is responsible for delivering the direction
+	 * data to the GameController, and for controlling the start
+	 * and end of the game itself. Additionally, it is used to 
+	 * set the first player by setting the gamepanel boolean
+	 * "isPlayer1" to true
+	 * @param session
+	 * @param message
+	 */
 	@OnMessage
 	public void onMessage(Session session, Message message) {
 		logger.info("Received ...." + message.toString());
 		
-		//TODO Change this to differentiate between player 1 and player 2
 		if (message instanceof GameControllerMessage) {
 			GameController.receivePoke((GameControllerMessage) message);
 		}
