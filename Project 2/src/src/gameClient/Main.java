@@ -48,8 +48,8 @@ public class Main{
 	 * and end of the game itself. Additionally, it is used to 
 	 * set the first player by setting the gamepanel boolean
 	 * "isPlayer1" to true
-	 * @param session
-	 * @param message
+	 * @param session session
+	 * @param message message
 	 */
 	@OnMessage
 	public void onMessage(Session session, Message message) {
